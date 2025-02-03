@@ -93,8 +93,13 @@ function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
     // Set drawing parameters for a thin, sharp line.
-    ctx.strokeStyle = '#000';
-    ctx.lineWidth = 1;
+    const gradient = ctx.createLinearGradient(20, 0, 220, 0);
+    gradient.addColorStop("0", "red");
+    gradient.addColorStop("0.5", "blue");
+    gradient.addColorStop("1.0", "green");
+    ctx.strokeStyle = gradient;
+
+    ctx.lineWidth = 0.5;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
     
@@ -117,9 +122,9 @@ function draw() {
     ctx.stroke();
     
     // Update rotation angles for continuous animation.
-    angleX += 0.005;
-    angleY += 0.005;
-    angleZ += 0.005;
+    angleX += 0.01;
+    angleY += 0.01;
+    angleZ += 0.01;
     
     requestAnimationFrame(draw);
 }

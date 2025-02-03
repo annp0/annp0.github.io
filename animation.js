@@ -51,7 +51,7 @@ function resize() {
     // Use maxRadius and worstCaseFactor to ensure the knot will not be cut off.
     computedScale = available / (maxRadius * worstCaseFactor);
 }
-window.addEventListener('resize', resize);
+
 resize();
 
 // Rotate a point (x, y, z) by angles around X, Y, and Z axes.

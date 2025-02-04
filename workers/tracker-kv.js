@@ -37,7 +37,13 @@ async function handleRequest(request) {
         city: cfData.city || "Unknown City",
     };
 
-    const body = request.json();
+    let body;
+    try {
+        body = await request.json(); 
+    } catch (e) {
+        return new Response("Invalid JSON", { status: 400 });
+    }
+
     const screenWidth = body.screenWidth;
     const screenHeight = body.screenHeight;
 

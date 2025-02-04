@@ -69,10 +69,10 @@ async function handleRequest(request) {
     // Helper: create a record to store.
     const createRecord = (id, ip) => ({
         location, // storing location snapshot
-        timestamp: Date.now(),
-        userAgent,
-        screenWidth,
-        screenHeight,
+        timestamp: Date(Date.now()).toString(), // need update
+        //userAgent, // only care about first time
+        //screenWidth, // same, only care about first time
+        //screenHeight, // same, only care about first time
         stableId: id,
         ip
     });
@@ -86,15 +86,19 @@ async function handleRequest(request) {
         // Found a record via cookie mapping.
         const record = JSON.parse(cookieRecordRaw);
         stableId = record.stableId;
+
+        // Always update the timestamp and ensure the record reflects the current time.
+        record.timestamp = Date(Date.now()).toString();  // Update timestamp for returning users.
+
         // If the IP has changed from what we recorded, update the record.
         if (record.ip !== ip) {
             record.ip = ip;
             record.location = location;
-            record.timestamp = Date.now();
-            // Update both KV mappings.
-            await USER_KV.put(cookieKey, JSON.stringify(record));
-            await USER_KV.put(`user:ip:${ip}`, JSON.stringify(record));
         }
+
+        // Update both KV mappings.
+        await USER_KV.put(cookieKey, JSON.stringify(record));
+        await USER_KV.put(`user:ip:${ip}`, JSON.stringify(record));
         } else {
         // No record was found via cookie mapping.
         // Try to locate a record using the IP.
@@ -104,13 +108,20 @@ async function handleRequest(request) {
             // Found a record via IP mapping: use that stable ID.
             const record = JSON.parse(ipRecordRaw);
             stableId = record.stableId;
+
+            // Always update the timestamp and ensure the record reflects the current time.
+            record.timestamp = Date(Date.now()).toString();  // Update timestamp for returning users.
             // Now create a cookie mapping so that next time the cookie is used.
             await USER_KV.put(cookieKey, JSON.stringify(record));
+            await USER_KV.put(ipKey, JSON.stringify(record));
         } else {
             // Neither cookie nor IP found in KV: treat this as a new visitor.
             stableId = crypto.randomUUID();
+            cookieValue = stableId; // Ensure the cookie is fresh.
+            setCookie = true;
+
             const record = createRecord(stableId, ip);
-            await USER_KV.put(cookieKey, JSON.stringify(record));
+            await USER_KV.put(`user:cookie:${cookieValue}`, JSON.stringify(record));
             await USER_KV.put(`user:ip:${ip}`, JSON.stringify(record));
         }
         }
@@ -120,14 +131,18 @@ async function handleRequest(request) {
         const ipKey = `user:ip:${ip}`;
         const ipRecordRaw = await USER_KV.get(ipKey);
         if (ipRecordRaw) {
-        // Found a record by IP mapping.
-        const record = JSON.parse(ipRecordRaw);
-        stableId = record.stableId;
-        // We want to "restore" the cookie so that future requests use the cookie mapping.
-        cookieValue = stableId;
-        setCookie = true;
-        // Save the mapping from cookie value to record.
-        await USER_KV.put(`user:cookie:${cookieValue}`, JSON.stringify(record));
+            // Found a record by IP mapping.
+            const record = JSON.parse(ipRecordRaw);
+            stableId = record.stableId;
+
+            // Always update the timestamp and ensure the record reflects the current time.
+            record.timestamp = Date(Date.now()).toString();  // Update timestamp for returning users.
+            // We want to "restore" the cookie so that future requests use the cookie mapping.
+            cookieValue = stableId;
+            setCookie = true;
+            // Save the mapping from cookie value to record.
+            await USER_KV.put(`user:cookie:${cookieValue}`, JSON.stringify(record));
+            await USER_KV.put(ipKey, JSON.stringify(record));
         } else {
         // No record found by either cookie or IP.
         // Generate a new stable id.

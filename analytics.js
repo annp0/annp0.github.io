@@ -1,6 +1,6 @@
 async function fetchUserInfo() {
     try {
-    const response = await fetch("https://analytics.phsnomy.workers.dev");
+    const response = await fetch("https://tracker-kv.phsnomy.workers.dev");
     const data = await response.json();
     document.getElementById("user-id").innerText = data.stableId;
     document.getElementById("user-location").innerText = 

@@ -24,6 +24,7 @@ function parseCookies(cookieString) {
 async function handleRequest(request) {
     // Get the IP address from Cloudflare's header.
     const ip = request.headers.get("CF-Connecting-IP") || "unknown-ip";
+    const userAgent = request.headers.get("User-Agent") || "Unknown";
 
     const origin = request.headers.get("Origin"); // Get the request origin
     const isAllowed = ALLOWED_ORIGINS.includes(origin); // Check if it's allowed
@@ -47,6 +48,7 @@ async function handleRequest(request) {
     const createRecord = (id, ip) => ({
         stableId: id,
         ip,
+        userAgent,
         location, // storing location snapshot
         timestamp: Date.now(),
     });

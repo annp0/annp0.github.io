@@ -22,11 +22,25 @@ function parseCookies(cookieString) {
  * Main request handler.
  */
 async function handleRequest(request) {
+    
+    const origin = request.headers.get("Origin"); // Get the request origin
+
+    if (request.method === "OPTIONS") {
+        // Handle preflight (OPTIONS) request
+        return new Response(null, {
+        headers: {
+            "Access-Control-Allow-Origin": isAllowed ? origin : "null",
+            "Access-Control-Allow-Methods": "POST, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type",
+            "Access-Control-Max-Age": "86400", // Cache preflight for 1 day
+        },
+        });
+    }
+    
     // Get the IP address from Cloudflare's header.
     const ip = request.headers.get("CF-Connecting-IP") || "unknown-ip";
     const userAgent = request.headers.get("User-Agent") || "Unknown";
 
-    const origin = request.headers.get("Origin"); // Get the request origin
     const isAllowed = ALLOWED_ORIGINS.includes(origin); // Check if it's allowed
 
     // Get geolocation information from Cloudflare.

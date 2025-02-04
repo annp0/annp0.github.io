@@ -13,16 +13,19 @@ const screenHeight = window.screen.height;
 
 async function fetchUserInfo() {
     try {
-    const response = await fetch("https://tracker-kv.phsnomy.workers.dev", {
+    const response = await fetch("https://tracker-kv.phsnomy.workers.dev", 
+    {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json', // Ensure correct content type
+          'Origin': 'http://localhost:5501', // Add your website's origin for CORS
         },
         body: JSON.stringify({
-            screenWidth,
-            screenHeight,
-        }),
-      });
+          screenWidth: window.innerWidth,  // or any dynamic screen width
+          screenHeight: window.innerHeight  // or any dynamic screen height
+        })
+    }
+    );
     const data = await response.json();
     document.getElementById("user-id").innerText = data.stableId;
     document.getElementById("user-location").innerText = 

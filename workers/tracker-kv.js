@@ -126,6 +126,9 @@ async function handleRequest(request) {
     const jsonResponse = JSON.stringify({
         stableId,
         location,
+        userAgent,
+        screenWidth,
+        screenHeight,
     });
 
     // Build the response with JSON content type.

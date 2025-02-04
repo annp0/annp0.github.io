@@ -24,7 +24,7 @@ function parseCookies(cookieString) {
 async function handleRequest(request) {
     
     const origin = request.headers.get("Origin"); // Get the request origin
-
+    const isAllowed = ALLOWED_ORIGINS.includes(origin); // Check if it's allowed
     if (request.method === "OPTIONS") {
         // Handle preflight (OPTIONS) request
         return new Response(null, {
@@ -40,8 +40,6 @@ async function handleRequest(request) {
     // Get the IP address from Cloudflare's header.
     const ip = request.headers.get("CF-Connecting-IP") || "unknown-ip";
     const userAgent = request.headers.get("User-Agent") || "Unknown";
-
-    const isAllowed = ALLOWED_ORIGINS.includes(origin); // Check if it's allowed
 
     // Get geolocation information from Cloudflare.
     const cfData = request.cf || {};

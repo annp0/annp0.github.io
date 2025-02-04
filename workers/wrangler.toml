@@ -1,6 +1,6 @@
 # Cloudflare Worker Configuration
-name = "track-kv"
-main = "track-kv.js"  # Entry file
+name = "tracker-kv"
+main = "tracker-kv.js"  # Entry file
 
 # KV Namespace Binding
 kv_namespaces = [

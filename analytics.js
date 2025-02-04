@@ -21,7 +21,6 @@ async function fetchUserInfo() {
         body: JSON.stringify({
             screenWidth,
             screenHeight,
-            userAgent,
         }),
       });
     const data = await response.json();

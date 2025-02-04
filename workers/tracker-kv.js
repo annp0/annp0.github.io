@@ -37,7 +37,7 @@ async function handleRequest(request) {
         city: cfData.city || "Unknown City",
     };
 
-    const body = await request.json();
+    const body = request.json();
     const screenWidth = body.screenWidth;
     const screenHeight = body.screenHeight;
 

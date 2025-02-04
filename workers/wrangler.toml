@@ -1,0 +1,8 @@
+# Cloudflare Worker Configuration
+name = "track-kv"
+main = "track-kv.js"  # Entry file
+
+# KV Namespace Binding
+kv_namespaces = [
+  { binding = "USER_KV", id = "38cade06e9944f498ced2ce10a07ee3e" }
+]

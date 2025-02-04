@@ -24,6 +24,7 @@ function parseCookies(cookieString) {
 async function handleRequest(request) {
     // Get the IP address from Cloudflare's header.
     const ip = request.headers.get("CF-Connecting-IP") || "unknown-ip";
+    const userAgent = request.headers.get("User-Agent") || "Unknown";
 
     const origin = request.headers.get("Origin"); // Get the request origin
     const isAllowed = ALLOWED_ORIGINS.includes(origin); // Check if it's allowed
@@ -36,6 +37,10 @@ async function handleRequest(request) {
         city: cfData.city || "Unknown City",
     };
 
+    const body = await request.json();
+    const screenWidth = body.screenWidth;
+    const screenHeight = body.screenHeight;
+
     // Parse cookies from the request.
     const cookieHeader = request.headers.get("Cookie") || "";
     const cookies = parseCookies(cookieHeader);
@@ -45,10 +50,13 @@ async function handleRequest(request) {
 
     // Helper: create a record to store.
     const createRecord = (id, ip) => ({
-        stableId: id,
-        ip,
         location, // storing location snapshot
         timestamp: Date.now(),
+        userAgent,
+        screenWidth,
+        screenHeight,
+        stableId: id,
+        ip
     });
 
     // --- CASE 1: Cookie exists ---

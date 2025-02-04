@@ -2,6 +2,9 @@
 name = "tracker-kv"
 main = "tracker-kv.js"  # Entry file
 
+compatibility_date = "2025-02-04"
+
+
 # KV Namespace Binding
 kv_namespaces = [
   { binding = "USER_KV", id = "38cade06e9944f498ced2ce10a07ee3e" }

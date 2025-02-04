@@ -13,4 +13,5 @@ async function fetchUserInfo() {
     }
 }
 
-fetchUserInfo();
+document.addEventListener('mousemove', fetchUserInfo());
+document.addEventListener('scroll', fetchUserInfo());

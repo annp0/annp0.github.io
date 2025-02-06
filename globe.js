@@ -12,9 +12,9 @@ import {
 
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js?external=three";
 
+let points = await (await fetch('files/points.json')).json()
+let countries = await (await fetch('files/globe-data-min.json')).json()
 
-import points from "./files/points.json" with { type : "json" };
-import countries from "./files/globe-data-min.json" with { type : "json" };
 
 const pairs = [];
 for (let i = 0; i < points.length; i++) {

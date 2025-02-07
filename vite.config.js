@@ -8,9 +8,13 @@ export default defineConfig({
   build: {
     outDir: 'docs',
     rollupOptions: {
+      preserveEntrySignatures: "allow-extension",
       input: {
         main: resolve(__dirname, 'index.html'),
       },
+      output: {
+        preserveModules: true
+      }
     },
   },
 })

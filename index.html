@@ -4,49 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nan An</title>
+    <link rel="stylesheet" href="stylesheet.css">
     <canvas id="globe"></canvas>
     <script src="globe.js" type="module"></script>
     <script src="animation.js" type="module" defer></script>
     <script src="analytics.js" type="module" defer></script>
     <script src="trefoil.js" type="module" defer></script>
-    <style>
-        #globe { position: fixed; top:0; right:0; z-index: 1;}
-        #content {z-index: 2; position: relative; width: 90%; margin-left: auto; margin-right: auto}
-        #build {z-index: 2; position: relative; max-width: 720px; margin:auto; display: none}
-        #track {z-index: 2; position: relative; max-width: 720px; margin:auto; display: none}
-        #about {z-index: 2; position: relative; max-width: 720px; margin:auto; display: none}
-        #aboutme {
-            z-index: 2;
-            display: flex;
-            @media (max-width: 400px) {
-                display: block;
-            }}
-        body { color:rgb(255, 255, 255); font-family: monospace; margin: auto; padding: 20px; max-width: 720px; background-color: #040d21;}
-        nav { display: inline-block; }
-        a { color: white; cursor: pointer; text-decoration: underline;}
-    </style>
 </head>
 <body>
     <div id="content">
-    <h1>Nan An</h1>
-    <p style="width: 70%; color:rgb(122, 122, 122)"><i>Sapiens dominabitur astris</i></p>
-    <p style="width: 70%;">Data Scientist, Software Developer,<br>
-    Mathematician, Physist
-    </p>
-    <nav><a id="toaboutbutton">Learn more about me ></a></nav>
-    <p style="width: 70%;">The interactive globe displays data gathered from my analytics system. It also acts as a honeypot and delivers reverse slow-lorries attacks to malicious requests.</p>
-    <nav><a id="tobuildbutton">Learn more about how I built it ></a></nav>
-
-    <p>
-    <div>
-        <span id="status" style="color: red;">&#x25cf;</span> Analytics Information
-        <div>ID: <span id="user-id">Loading...</span></div>
-        <div>Location: <span id="user-location">Loading...</span></div>
+        <h1>Nan An</h1>
+        <p style="width: 70%; color:rgb(122, 122, 122)"><i>Sapiens dominabitur astris</i></p>
+        <p style="width: 70%;">Data Scientist, Software Developer,<br> Mathematician, Physist</p>
+        <nav><a id="toaboutbutton">Learn more about me ></a></nav>
+        <p style="width: 70%;">The interactive globe displays data gathered from my analytics system. It also acts as a honeypot and delivers reverse slow-lorries attacks to malicious requests.</p>
+        <nav><a id="tobuildbutton">Learn more about how I built it ></a></nav>
+        <p><div>
+            <span id="status" style="color: red;">&#x25cf;</span> Analytics Information
+            <div>ID: <span id="user-id">Loading...</span></div>
+            <div>Location: <span id="user-location">Loading...</span></div>
+        </div></p>
+        <nav><a id="totrackbutton">Learn more about I track analytics ></a></nav>
     </div>
-    </p>
-    <nav><a id="totrackbutton">Learn more about I track analytics ></a></nav>
 
-    </div>
     <div id="build">
         <nav><a id="toconbutton">&lt; Back</a></nav>
         <h1>The Analytics System</h1>

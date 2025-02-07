@@ -1,0 +1,1 @@
+import{getDefaultExportFromCjs as r}from"./_commonjsHelpers-Dd0bWGM8.js";import{__require as e}from"../node_modules/frame-ticker/dist/FrameTicker-k1WEuVmW.js";var o=e();const m=r(o);export{m as default};

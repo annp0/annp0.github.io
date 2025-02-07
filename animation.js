@@ -7,11 +7,7 @@ navs.forEach((n) => {
     n.addEventListener("mouseout", () => animate(n, {opacity: [1, 0.5], scale: [1.1, 1]}, {duration: 1}))
 })
 
-animate(
-    navs,
-    { opacity: [0, 0.5] },
-    { duration: 1 }
-);
+animate(navs, {opacity: [0, 0.5]}, {duration: 1});
 
 let build_b = document.getElementById("tobuildbutton")
 let track_b = document.getElementById("totrackbutton")

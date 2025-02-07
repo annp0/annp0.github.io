@@ -6,9 +6,9 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 
 export default defineConfig({
   build: {
-    outDir: 'docs',
+    outDir: 'dist',
     rollupOptions: {
-      preserveEntrySignatures: "allow-extension",
+      preserveEntrySignatures: "exports-only",
       input: {
         main: resolve(__dirname, 'index.html'),
       },

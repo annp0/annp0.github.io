@@ -1,4 +1,4 @@
-import ThreeGlobe from 'https://esm.sh/three-globe?external=three';
+import ThreeGlobe from 'three-globe';
 
 import { WebGLRenderer, Scene } from "three";
 import {
@@ -10,11 +10,15 @@ import {
   PointLight,
 } from "three";
 
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js?external=three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
-let points = await (await fetch('files/points.json')).json()
-let countries = await (await fetch('files/globe-data-min.json')).json()
+import { points } from "./points.js"
+import { countries } from "./globe-data-min.js"
 
+var renderer, camera, scene, controls;
+let windowHalfX = window.innerWidth / 2;
+let windowHalfY = window.innerHeight / 2;
+var Globe;
 
 const pairs = [];
 for (let i = 0; i < points.length; i++) {
@@ -26,12 +30,6 @@ for (let i = 0; i < points.length; i++) {
         endLng: points[j].lng});
     }
 }
-
-var renderer, camera, scene, controls;
-let windowHalfX = window.innerWidth / 2;
-let windowHalfY = window.innerHeight / 2;
-var Globe;
-
 init();
 initGlobe();
 onWindowResize();

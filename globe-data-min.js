@@ -1,4 +1,6 @@
-{
+export {countries}
+
+let countries = {
   "type": "FeatureCollection",
   "features": [
     {

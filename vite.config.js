@@ -11,6 +11,7 @@ export default defineConfig({
       preserveEntrySignatures: "exports-only",
       input: {
         main: resolve(__dirname, 'index.html'),
+        vivi: resolve(__dirname, 'vivi.html')
       },
       output: {
         preserveModules: true

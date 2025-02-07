@@ -32,22 +32,14 @@ let angleX = 0, angleY = 0, angleZ = 0;
 // We'll compute a scale factor based on the container’s dimensions.
 let computedScale = 1;
 function resize() {
-    const container = document.querySelector('.knot-container');
-    const rect = container.getBoundingClientRect();
-    const dpr = window.devicePixelRatio || 1;
     
     // Set the internal canvas resolution high for crisp lines.
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
-    // Style dimensions remain as defined in CSS.
-    canvas.style.width = rect.width + 'px';
-    canvas.style.height = rect.height + 'px';
-    // Reset the transform (avoid accumulation) and scale for high-DPI.
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    canvas.width = 300;
+    canvas.height = 300;
     
     // Compute a scale so that the knot fits within the container.
     const margin = 10; // pixels margin around the knot
-    const available = Math.min(rect.width, rect.height) / 2 - margin;
+    const available = Math.min(canvas.width, canvas.height) / 2 - margin;
     // Use maxRadius and worstCaseFactor to ensure the knot will not be cut off.
     computedScale = available / (maxRadius * worstCaseFactor);
 }
@@ -99,7 +91,7 @@ function draw() {
     gradient.addColorStop("1.0", "green");
     ctx.strokeStyle = gradient;
 
-    ctx.lineWidth = 0.5;
+    ctx.lineWidth = 1;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
     
@@ -110,8 +102,8 @@ function draw() {
     // Project the 3D point into 2D.
     const proj = project(rotated);
     // Apply the computed scale and translate to the canvas center.
-    const x2d = proj.x * computedScale + canvas.clientWidth / 2;
-    const y2d = proj.y * computedScale + canvas.clientHeight / 2;
+    const x2d = proj.x * computedScale + canvas.width / 2;
+    const y2d = proj.y * computedScale + canvas.height / 2;
     if (i === 0) {
         ctx.moveTo(x2d, y2d);
     } else {

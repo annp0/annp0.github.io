@@ -5,7 +5,6 @@ function act() {
         fetchUserInfo()
     }
     interact = true
-    console.log('act!')
 }
 
 const screenWidth = window.screen.width;

@@ -15,7 +15,7 @@
     <div id="content">
         <h1>Nan An</h1>
         <p style="width: 70%; color:rgb(122, 122, 122)"><i>Sapiens dominabitur astris</i></p>
-        <p style="width: 70%;">Data Scientist, Software Developer,<br> Mathematician, Physist</p>
+        <p style="width: 70%;">Data Scientist, Software Developer, Mathematician-Physist</p>
         <nav><a id="toaboutbutton">Learn more about me ></a></nav>
         <p style="width: 70%;">The interactive globe displays data gathered from my analytics system. The system also stalls malicious requests.</p>
         <nav><a id="tobuildbutton">Learn more about how I built it ></a></nav>
@@ -24,54 +24,58 @@
             <div>ID: <span id="user-id">Loading...</span></div>
             <div>Location: <span id="user-location">Loading...</span></div>
         </div></p>
-        <nav><a id="totrackbutton">Learn more about how I stall requests ></a></nav>
+        <nav><a id="totrackbutton">Learn more about how I stall malicious requests ></a></nav>
     </div>
 
     <div id="build">
         <nav><a id="toconbutton">&lt; Back</a></nav>
         <h1>Building My Analytics System</h1>
-        <p>
-            This system is built mainly on Cloudflare Workers, KV caches, and a D1 database. It also serves some API endpoints to provide frontend data for visualization on the 3D globe.
+        <h2>Requirements</h2>
+        <p>I wanted to build an efficient, scalable analytics system to track user activity on my website. Since I have a Cloudflare free tier account, those resources are availible: Workers, KV caches, and D1 databases. Additionally, the system should serve API endpoints for a real-time 3D visualization of visitor locations. I designed the following specifications.
         </p>
         <h2>Specifications</h2>
         <ul>
             <li>The database logs individual requests made to the website. The schema includes Geolocation, Time, IP, session ID, and a generated user ID. If two records share the same user ID, the system will think they come from the same user.</li>
-            <li>The users are tracked by their session IDs and their IPs.</li>
-            <li>If there is a session ID that matches, this request is to be assigned with the same user ID.</li>
-            <li>If there is an IP address that matches, but the session ID does not, the session ID has been tempered. In that case, reset the session ID with the most recent session ID recorded in the database.</li>
+            <li>Users are tracked based on their session ID and IP address. If a new request has a matching session ID, it is assigned the same user ID. However, if only the IP matches but the session ID does not, the system assumes the session ID has been tampered with. In this case, the session ID is reset to the most recent one recorded in the database.</li>
             <li>To optimize, the read & write operations to the database should be cached and batched as much as possible.</li>
             <li>Malicious requests should be redirected to other endpoints for slow-lories.</li>
         </ul>
         <p>This mechanism tries to link sessions by IP and session ID. The session IDs are signed to avoid manipulation. A single user can generate multiple identities by changing IP and clearing browsing data, but in general this should give a reasonable approximation of user activity.</p>
         <h2>Implementation</h2>
+        <p>The system follows a pipeline structure to optimize performance. The frontend logs user activity and sends data to Worker A, which writes to a KV cache. To prevent excessive writes, Worker B (running on a cron job) periodically batches and writes data to the SQL database. Requests follow these general pathways:</p>
         <codeblock>
-            -- Architechture Visualization -- <br>
-            (w: write, r: read)<br>
-            (A -> B) means A initializes requests to B<br><br>
+            Architecture Visualization <br>
+            w: write, r: read, A -> B: A initializes requests to B<br><br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(cron)<br>
-            Front End &lt;-> Worker A -w-> KV Cache &lt;-r- Worker B -w-> SQL Database<br>
+            Front End --> Worker A -w-> KV Cache &lt;-r- Worker B -w-> SQL Database<br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^<br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+-----r----+--- (if cache miss), r---------+<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+---- r ---+--- r (if cache-miss) ---------+<br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| (Malicious Requests)<br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;V<br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nginx (redirects to slow-lories)<br>
         </codeblock>
         <ul>
-            <li>The tracking script loads on 'mousemove' and 'scroll' events. This filters bot traffic. The script will send a request to a Worker (A).</li>
-            <li>A logs the request, along with the IP address and session ID. The geographic location is inferred from the IP address using cloudflare's API.</li>
-            <li>A writes to KV cache and reads user ID. It will first try to read from cache. If it is a miss, A will read from the database. Then A sends the user ID back to the frontend.</li>
+            <li>To filter out bot traffic, the tracking script only activates on user interactions such as 'mousemove' and 'scroll' events. Once triggered, it sends a request to Worker A.</li>
+            <li>Worker A logs the request, along with the IP address and session ID. The geographic location is inferred from the IP address using cloudflare's API.</li>
+            <li>Worker A writes to KV cache and reads user ID. It will first try to read from cache. If it is a miss, Worker A will read from the database. Then Worker A sends the user ID back to the frontend.</li>
             <li>Worker B, sitting on a cron trigger that runs every 30 mins, collects the writes registered in cache, and write to the database in batch.</li>
         </ul>
         <h2>KV Cache Design</h2>
-        <p>Writes are cached by <code>W-[ID]-[No]: Values</code>. They have a life time of an hour. I added <code>[No]</code> in case there are multiple writes for the same ID. Worker B will collect all of those writes and write to the database in batch.
+        <p>Writes are cached using <code>W-[ID]-[No]: Values</code> and remain valid for one hour. I included <code>[No]</code> to handle multiple writes for the same ID. Worker B periodically collects these cached writes and batches them into the database.
         </p>
-        <p>Reads are cached by <code>R-[ID]: Values</code>, since only the newest read needs to be kept. They have a life time of 5 minutes.
+        <p>Reads are cached using <code>R-[ID]: Values</code>, as only the most recent read needs to be retained. These entries expire after five minutes.
         </p>
-        <p>Now when A tries to read, there are potentially three versions of truth: the write-cache, read-cache, and the database itself. A will first try to read from write-cache since it is the freshest, then it will try to read from read-cache, and last the database. The information retrieved by A might be 5 minutes out-of-date due to the inherient nature of caching, but I feel it is acceptable.</p>
+        <p>When Worker A attempts to read data, there are three potential sources: the write-cache, the read-cache, and the database. It first checks the write-cache for the most up-to-date data. If no entry is found, it falls back to the read-cache, and as a last resort, queries the database. This approach means that some retrieved data may be up to five minutes outdated, but this is an acceptable trade-off for improved performance.</p>
+        <h2>Visualization with the Globe</h2>
+        <p>The Globe is built with Three.js. To make sure it is responsive, an event listener is added to <code>window</code> for resizing events. I originally set the canvas to <code>window.innerWidth/Height</code> and <code>position: fixed</code>. However, through testing, I found that on mobile devices, zooming in caused the canvas and the Globe to move and drift unexpectedly. After digging through documentation, I realized this is because of viewport - <code>innerWidth/Height</code> is the size of the viewport (not the whole window) and <code>fixed</code> pins the canvas by viewport. Using <code>outerWidth/Height</code> and <code>position: absolute</code> (which pins the canvas against its parent, <code>body</code>) solved the issue. </p>
         <h2>In the end</h2>
-        Thanks to the generosity of cloudflare, all the assets used in this system is free. This system is optimized for high-load scenerios, and is rather easy to scale. It has been very fun to think about and implementing the system :) 
+        <p>
+            Thanks to Cloudflare’s generous free-tier offerings, all the resources used in this system are free. The system is optimized for high-load scenarios and is designed to scale easily. 
+        </p><p>
+        It has been very fun to design and implement the system :) 
+        </p>
     </div>
 
     <div id="track">

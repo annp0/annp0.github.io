@@ -39,8 +39,6 @@ fetch("globe-data-min.json").then((response) => {
 })
 
 var renderer, camera, scene, controls;
-let windowHalfX = window.outerWidth / 2;
-let windowHalfY = window.outerHeight / 2;
 var Globe;
 
 function renderGlobe(points, pairs, countries) {
@@ -158,8 +156,6 @@ function initGlobe(points, pairs, countries) {
 function onWindowResize() {
     camera.aspect = window.outerWidth / window.outerHeight;
     camera.updateProjectionMatrix();
-    windowHalfX = window.outerWidth / 1.5;
-    windowHalfY = window.outerHeight / 1.5;
     renderer.setSize(window.outerWidth, window.outerHeight);
 }
 

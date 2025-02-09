@@ -3,7 +3,8 @@ body {
     font-family: monospace; 
     margin: auto; 
     padding: 20px; 
-    max-width: 720px; 
+    max-width: 720px;
+    line-height: 1.5;
     background-color: #040d21;
 }
 
@@ -57,11 +58,12 @@ a {
 }
 
 code {
-    background-color: rgb(51, 51, 51);
+    border: 1px solid white;
 }
 
 codeblock {
-    background-color: rgb(51, 51, 51);
+    padding: 20px;
+    border: 1px solid white;
     overflow: auto;
     white-space: nowrap;
     display: block;

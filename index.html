@@ -17,60 +17,73 @@
         <p style="width: 70%; color:rgb(122, 122, 122)"><i>Sapiens dominabitur astris</i></p>
         <p style="width: 70%;">Data Scientist, Software Developer,<br> Mathematician, Physist</p>
         <nav><a id="toaboutbutton">Learn more about me ></a></nav>
-        <p style="width: 70%;">The interactive globe displays data gathered from my analytics system. It also delivers reverse slow-lories to malicious requests.</p>
+        <p style="width: 70%;">The interactive globe displays data gathered from my analytics system. The system also stalls malicious requests.</p>
         <nav><a id="tobuildbutton">Learn more about how I built it ></a></nav>
         <p><div>
             <span id="status" style="color: red;">&#x25cf;</span> Analytics Information
             <div>ID: <span id="user-id">Loading...</span></div>
             <div>Location: <span id="user-location">Loading...</span></div>
         </div></p>
-        <nav><a id="totrackbutton">Learn more about how I track analytics ></a></nav>
+        <nav><a id="totrackbutton">Learn more about how I stall requests ></a></nav>
     </div>
 
     <div id="build">
         <nav><a id="toconbutton">&lt; Back</a></nav>
         <h1>Building My Analytics System</h1>
         <p>
-            This system is built on Cloudflare Workers, KV caches, and a D1 database. It also serves some API endpoints to provide frontend data for visualization on the 3D globe.
+            This system is built mainly on Cloudflare Workers, KV caches, and a D1 database. It also serves some API endpoints to provide frontend data for visualization on the 3D globe.
         </p>
-        <h2>Specification</h2>
+        <h2>Specifications</h2>
         <ul>
             <li>The database logs individual requests made to the website. The schema includes Geolocation, Time, IP, session ID, and a generated user ID. If two records share the same user ID, the system will think they come from the same user.</li>
             <li>The users are tracked by their session IDs and their IPs.</li>
             <li>If there is a session ID that matches, this request is to be assigned with the same user ID.</li>
-            <li>If there is an IP adress that matches, but the session ID does not, the session ID has been tempered. In that case</li>
+            <li>If there is an IP address that matches, but the session ID does not, the session ID has been tempered. In that case, reset the session ID with the most recent session ID recorded in the database.</li>
+            <li>To optimize, the read & write operations to the database should be cached and batched as much as possible.</li>
+            <li>Malicious requests should be redirected to other endpoints for slow-lories.</li>
         </ul>
+        <p>This mechanism tries to link sessions by IP and session ID. The session IDs are signed to avoid manipulation. A single user can generate multiple identities by changing IP and clearing browsing data, but in general this should give a reasonable approximation of user activity.</p>
         <h2>Implementation</h2>
+        <codeblock>
+            -- Architechture Visualization -- <br>
+            (w: write, r: read)<br>
+            (A -> B) means A initializes requests to B<br><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(cron)<br>
+            Front End &lt;-> Worker A -w-> KV Cache &lt;-r- Worker B -w-> SQL Database<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+-----r----+--- (if cache miss), r---------+<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| (Malicious Requests)<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;V<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nginx (redirects to slow-lories)<br>
+        </codeblock>
         <ul>
-            <li>The tracking script loads on 'mousemove' and 'scroll' events. This filters bot traffic.</li>
-            <li>The Worker logs the request, along with the IP address and cookies. The geographic location is inferred from the IP address using cloudflare's API.</li>
-            <li>The Worker writes thto a KV cache with the informatio</li>
+            <li>The tracking script loads on 'mousemove' and 'scroll' events. This filters bot traffic. The script will send a request to a Worker (A).</li>
+            <li>A logs the request, along with the IP address and session ID. The geographic location is inferred from the IP address using cloudflare's API.</li>
+            <li>A writes to KV cache and reads user ID. It will first try to read from cache. If it is a miss, A will read from the database. Then A sends the user ID back to the frontend.</li>
+            <li>Worker B, sitting on a cron trigger that runs every 30 mins, collects the writes registered in cache, and write to the database in batch.</li>
         </ul>
-
-
-
-It queries a KV cache to check for an existing user ID in the database.
-
-If the user is new, a new ID is assigned.
-
-SQL operations are stored in a KV cache for batch processing.
-
-A second Worker, triggered by a cron job every 30 minutes, processes the batch and commits data to Cloudflare D1.
-        <p>Once the script is loaded, it will listen to any mouse move or scroll events from the browser. Once those events are triggered, it will send a request to a cloudflare worker. This filters out bot traffic.</p>
-        <h2></h2>
-        <p>I'm going to write something here</p>
+        <h2>KV Cache Design</h2>
+        <p>Writes are cached by <code>W-[ID]-[No]: Values</code>. They have a life time of an hour. I added <code>[No]</code> in case there are multiple writes for the same ID. Worker B will collect all of those writes and write to the database in batch.
+        </p>
+        <p>Reads are cached by <code>R-[ID]: Values</code>, since only the newest read needs to be kept. They have a life time of 5 minutes.
+        </p>
+        <p>Now when A tries to read, there are potentially three versions of truth: the write-cache, read-cache, and the database itself. A will first try to read from write-cache since it is the freshest, then it will try to read from read-cache, and last the database. The information retrieved by A might be 5 minutes out-of-date due to the inherient nature of caching, but I feel it is acceptable.</p>
+        <h2>In the end</h2>
+        Thanks to the generosity of cloudflare, all the assets used in this system is free. This system is optimized for high-load scenerios, and is rather easy to scale. It has been very fun to think about and implementing the system :) 
     </div>
 
     <div id="track">
         <nav><a id="toconbuttontra">&lt; Back</a></nav>
-        <h1>The Tracking Stractgy</h1>
-        <p>I'm going to write something here</p>
+        <h1>--In writing--</h1>
+        <p>--I'm going to write something here--</p>
     </div>
 
     <div id="about"> 
         <nav><a id="toconbuttonabo">&lt; Back</a></nav>
         <h1>Nan An</h1>
-        <p><a href="https://github.com/annp0">Resume</a> <a href="https://github.com/annp0">Github</a></p>
+        <p><a href="https://github.com/annp0">Resume ></a> <a href="https://github.com/annp0">Github ></a></p>
         <p>
             Email: ann5@mcmaster.ca (Institution), admin@annan.eu.org (Website)
         </p>
@@ -78,8 +91,8 @@ A second Worker, triggered by a cron job every 30 minutes, processes the batch a
         <div id="aboutme">
             <div>
                 <p>I’m a Data Scientist and Software Developer pursuing an M.Sc. in Computer Science at McMaster University. My research focuses on software modeling, and I have experience in machine learning, AI, and data-driven problem-solving. I’ve worked on large-scale data projects at the Ministry of Health and Front Row Ventures. I also contribute to open-source projects like Neo4j.</p>
-                <p>Besides, I am interested in a wide range of problems in probability, elliptic curves and quantum statistics. I am an outdoor person and I love nature:</p>
-                <div style="text-align: center;">Z = tr(e<sup>-βĤ</sup>) (The Grand-Canonical Partition Function)</div>
+                <p>Coming from a background in mathematics and physics, I love optimizition and thought experiments. I am an outdoor person and I love nature:</p>
+                <div style="text-align: center;">Z = tr(e<sup>-βĤ</sup>) (The Canonical Partition Function)</div>
             </div>
             <div id="knot-container">
                 <canvas id="canvas"></canvas>
@@ -130,14 +143,15 @@ A second Worker, triggered by a cron job every 30 minutes, processes the batch a
         <ul>
             <li><a href="https://github.com/annp0/models-in-agda-pilot">Models in Agda</a>: Showcasing software modeling with dependent types [Agda]</li>
         </ul>
-        <h2>Notes</h2>
-        <ul>
-            <li><a href="files/ct-1.pdf">Notes on Natural Transformation</a></li>
-            <li><a href="files/notes-on-dt.pdf">Notes on Differential Topology</a></li>
-            <li><a href="files/ra-sol-ch1-3.pdf">Solutions to Selected Real Analysis Problems</a></li>
-            <li><a href="files/galois.pdf">Introduction to Galois Theory</a></li>
-        </ul>
-        <footer>- End of page -</footer>
+        <div id="Notes">
+        <h2>Notes (Mathematics)</h2>
+            <ul>
+                <li><a href="files/ct-1.pdf">Notes on Natural Transformation</a></li>
+                <li><a href="files/notes-on-dt.pdf">Notes on Differential Topology</a></li>
+                <li><a href="files/ra-sol-ch1-3.pdf">Solutions to Selected Real Analysis Problems</a></li>
+                <li><a href="files/galois.pdf">Introduction to Galois Theory</a></li>
+            </ul>
+        </div>
     </div>
 </body>
 </html>

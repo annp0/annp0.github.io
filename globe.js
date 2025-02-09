@@ -99,14 +99,12 @@ function init() {
     controls.enableDamping = true;
     controls.dynamicDampingFactor = 0.01;
     controls.enablePan = false;
-    controls.minDistance = 200;
-    controls.maxDistance = 1000;
     controls.rotateSpeed = 0.5;
-    controls.zoomSpeed = 0.5;
+    controls.enableZoom = false;
     controls.autoRotate = true;
 
-    controls.minPolarAngle = Math.PI / 3.5;
-    controls.maxPolarAngle = Math.PI - Math.PI / 3;
+    controls.minPolarAngle = Math.PI * (7 / 16);
+    controls.maxPolarAngle = Math.PI * (9 / 16);
 
     window.addEventListener("resize", onWindowResize, false);
 }

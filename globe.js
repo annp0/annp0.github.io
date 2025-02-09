@@ -39,8 +39,8 @@ fetch("globe-data-min.json").then((response) => {
 })
 
 var renderer, camera, scene, controls;
-let windowHalfX = window.innerWidth / 2;
-let windowHalfY = window.innerHeight / 2;
+let windowHalfX = window.outerWidth / 2;
+let windowHalfY = window.outerHeight / 2;
 var Globe;
 
 function renderGlobe(points, pairs, countries) {
@@ -58,7 +58,7 @@ function init() {
         canvas: document.getElementById("globe")
     });
     renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(window.outerWidth, window.outerHeight);
     // renderer.outputEncoding = THREE.sRGBEncoding;
     document.body.appendChild(renderer.domElement);
 
@@ -69,7 +69,7 @@ function init() {
 
     // Initialize camera, light
     camera = new PerspectiveCamera();
-    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.aspect = window.outerWidth / window.outerHeight;
     camera.updateProjectionMatrix();
 
     // Setup camera
@@ -156,11 +156,11 @@ function initGlobe(points, pairs, countries) {
 }
 
 function onWindowResize() {
-    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.aspect = window.outerWidth / window.outerHeight;
     camera.updateProjectionMatrix();
-    windowHalfX = window.innerWidth / 1.5;
-    windowHalfY = window.innerHeight / 1.5;
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    windowHalfX = window.outerWidth / 1.5;
+    windowHalfY = window.outerHeight / 1.5;
+    renderer.setSize(window.outerWidth, window.outerHeight);
 }
 
 function animate() {

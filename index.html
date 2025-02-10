@@ -72,9 +72,7 @@
         <p>The Globe is built with Three.js. To make sure it is responsive, an event listener is added to <code>window</code> for resizing events. I originally set the canvas to <code>window.innerWidth/Height</code> and <code>position: fixed</code>. However, through testing, I found that on mobile devices, zooming in caused the canvas and the Globe to move and drift unexpectedly. After digging through documentation, I realized this is because of viewport - <code>innerWidth/Height</code> is the size of the viewport (not the whole window) and <code>fixed</code> pins the canvas by viewport. Using <code>outerWidth/Height</code> and <code>position: absolute</code> (which pins the canvas against its parent, <code>body</code>) solved the issue. </p>
         <h2>In the end</h2>
         <p>
-            Thanks to Cloudflare’s generous free-tier offerings, all the resources used in this system are free. The system is optimized for high-load scenarios and is designed to scale easily. 
-        </p><p>
-        It has been very fun to design and implement the system :) 
+            Thanks to Cloudflare’s generous free-tier offerings, all the resources used in this system are free.
         </p>
     </div>
 

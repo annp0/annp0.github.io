@@ -10,11 +10,9 @@ navs.forEach((n) => {
 animate(navs, {opacity: [0, 0.8]}, {duration: 1});
 
 let build_b = document.getElementById("tobuildbutton")
-let track_b = document.getElementById("totrackbutton")
 let about_b = document.getElementById("toaboutbutton")
 let con = document.getElementById("content")
 let bui = document.getElementById("build")
-let tra = document.getElementById("track")
 let bgd = document.getElementById("globe")
 let abo = document.getElementById("about")
 build_b.addEventListener("click", () => {
@@ -25,17 +23,6 @@ build_b.addEventListener("click", () => {
         bgd.style.display = "none";
         bui.style.display = "block";
         animate(bui, {opacity: [0, 1]}, {duration: 0.5});
-    }, 500)
-})
-
-track_b.addEventListener("click", () => {
-    animate(con, {opacity: [1, 0]}, {duration: 0.5 });
-    animate(bgd, {opacity: [1, 0]}, {duration: 0.5 });
-    setTimeout(() => {
-        con.style.display = "none";
-        bgd.style.display = "none";
-        tra.style.display = "block";
-        animate(tra, {opacity: [0, 1]}, {duration: 0.5});
     }, 500)
 })
 
@@ -59,18 +46,6 @@ con_b.addEventListener("click", () => {
         bgd.style.display = "block";
         animate(bgd, {opacity: [0, 1]}, {duration: 0.5 });
         animate(con, {opacity: [0, 1]}, {duration: 0.5});
-    }, 500)
-})
-
-let con_t = document.getElementById("toconbuttontra")
-con_t.addEventListener("click", () => {
-    animate(tra, {opacity: [1, 0]}, {duration: 0.5 });
-    setTimeout(() => {
-        tra.style.display = "none";
-        con.style.display = "block";
-        bgd.style.display = "block";
-        animate(con, {opacity: [0, 1]}, {duration: 0.5});
-        animate(bgd, {opacity: [0, 1]}, {duration: 0.5 });
     }, 500)
 })
 

@@ -97,12 +97,12 @@ function init() {
     controls.enableDamping = true;
     controls.dynamicDampingFactor = 0.01;
     controls.enablePan = false;
-    controls.rotateSpeed = 0.5;
+    controls.rotateSpeed = 0.2;
     controls.enableZoom = false;
     controls.autoRotate = true;
 
-    controls.minPolarAngle = Math.PI * (7 / 16);
-    controls.maxPolarAngle = Math.PI * (9 / 16);
+    controls.minPolarAngle = Math.PI * (3 / 16);
+    controls.maxPolarAngle = Math.PI * (5 / 16);
 
     //window.addEventListener("resize", onWindowResize, false);
 }
@@ -127,7 +127,7 @@ function initGlobe(points, pairs, countries) {
         Globe.arcsData(pairs)
         .arcColor((e) => {return "#ffffff";})
         .arcAltitude((e) => {
-            return Math.random() * 0.2 + 0.3;
+            0.5
         })
         .arcStroke((e) => {
             return 0.2;
@@ -136,7 +136,7 @@ function initGlobe(points, pairs, countries) {
         .arcDashGap(4)
         .arcDashAnimateTime(3000)
         .arcsTransitionDuration(3000)
-        .arcDashInitialGap((e) => Math.random()*20)
+        .arcDashInitialGap((e) => Math.random()*5)
         .pointsData(points)
         .pointColor(() => "#ffffff")
         .pointsMerge(true)

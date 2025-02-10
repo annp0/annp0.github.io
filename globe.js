@@ -104,7 +104,7 @@ function init() {
     controls.minPolarAngle = Math.PI * (7 / 16);
     controls.maxPolarAngle = Math.PI * (9 / 16);
 
-    window.addEventListener("resize", onWindowResize, false);
+    //window.addEventListener("resize", onWindowResize, false);
 }
 
 // SECTION Globe

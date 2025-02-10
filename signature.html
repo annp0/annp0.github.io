@@ -8,11 +8,8 @@
 </head>
 <body>
     <div id="content">
-        <a href="/">Back ></a>
+        <a href="/">&lt; Back</a>
         <h1>Signature</h1>
-        <p>
-            Thanks to <a href="https://letsencrypt.org">Let's Encrypt</a>, I was able to get a certificate for free. The chain of trust for my current certificate is: <code>ISRG Root X1 -> R11 -> annan.eu.org</code>.
-        </p>
         <codeblock>
             -----BEGIN PGP SIGNED MESSAGE-----<br>
             Hash: SHA512<br><br>
@@ -27,7 +24,7 @@
             -----END PGP SIGNATURE-----
         </codeblock>
         <p>
-            For internet publishing, my public key (ECE) is
+            My public key (ECE) for internet publishing is
         </p>
         <codeblock>
             -----BEGIN PGP PUBLIC KEY BLOCK-----<br>
@@ -45,5 +42,15 @@
             =IX+v<br>
             -----END PGP PUBLIC KEY BLOCK-----
         </codeblock>
+        <h2>TLS Certificate</h2>
+        <p>
+            Thanks to letsencrypt.org, I was able to get certificates for free. The certificates are validated through a trusted chain
+        </p>
+        <codeblock>
+            ISRG Root X1 -> R11 -> annan.eu.org
+        </codeblock>
+        <p>
+            If your devices has the appropriate root certificate installed, your connection to this site is secure.
+        </p>
     </div>
 </body>

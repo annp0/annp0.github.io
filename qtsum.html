@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nan An - Signature</title>
+    <link rel="stylesheet" href="stylesheet.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+</head>
+<body>
+    <div id="content">
+        <a href="/">&lt; Back</a>
+        <h1>Technical Summary of My Bachelor's Thesis</h1>
+        <h2>(A) Majorana Zero Modes in Topological Superconductors</h2>
+        <p>
+            Majorana Zero Modes are zero-energy excitations that emerge at the boundaries of topological superconductors. These modes are described by the Bogoliubov-de Gennes equation, and their existence is tied to the breaking of electron-hole symmetry in the presence of a strong magnetic field. The Hamiltonian for a one-dimensional p-wave superconductor is given by:
+        </p>
+        \[
+        H = -\mu \sum_x c_x^\dagger c_x - \frac{1}{2} \sum_x \left( t c_x^\dagger c_{x+1} + \Delta e^{i\phi} c_x c_{x+1} + h.c. \right)
+        \]
+        <p>
+            where:
+            <ul>
+                <li>\(\mu\) is the chemical potential,</li>
+                <li>\(t\) is the hopping amplitude,</li>
+                <li>\(\Delta\) is the superconducting pairing amplitude,</li>
+                <li>\(\phi\) is the superconducting phase.</li>
+            </ul>
+        </p>
+        <p>
+            When \(\mu = 0\) and \(t = \Delta\), the system hosts Majorana zero modes at its ends, described by the operators \(\gamma_1\) and \(\gamma_2\). These operators satisfy the anti-commutation relations:
+        </p>
+        \[
+        \{\gamma_i, \gamma_j\} = 2\delta_{ij}, \quad \gamma_i^2 = 1
+        \]
+        <p>
+            These Majorana modes are non-local, therefore the quantum information encoded in them is distributed across the system, providing topological protection against local perturbations. The non-locality arises because the Majorana operators \(\gamma_1\) and \(\gamma_2\) are spatially separated, and any local noise affecting one mode will not easily corrupt the encoded quantum information.
+        </p>
+        <p>
+            The Majorana zero modes can be understood as fractionalized fermions**. In a p-wave superconductor, the fermionic operators \(c_x\) and \(c_x^\dagger\) can be expressed in terms of Majorana operators:
+        </p>
+        \[
+        c_x = \frac{e^{-i\phi/2}}{2} (\gamma_{B,x} + i\gamma_{A,x}), \quad c_x^\dagger = \frac{e^{i\phi/2}}{2} (\gamma_{B,x} - i\gamma_{A,x})
+        \]
+        <p>
+        where \(\gamma_{A,x}\) and \(\gamma_{B,x}\) are Majorana operators at site \(x\). When \(\mu = 0\) and \(t = \Delta\), the Hamiltonian simplifies to:
+        </p>
+        \[
+        H = -i\frac{t}{2} \sum_{x=1}^{N-1} \gamma_{B,x} \gamma_{A,x+1}
+        \]
+        <p>
+        In this regime, the Majorana modes at the ends of the chain, \(\gamma_1 = \gamma_{A,1}\) and \(\gamma_2 = \gamma_{B,N}\), are decoupled from the rest of the system, forming a pair of zero-energy modes. These modes can be combined to form a non-local fermion:
+        </p>
+        \[
+        f = \frac{1}{2} (\gamma_1 + i\gamma_2)
+        \]
+        <p>
+        This fermion operator \(f\) and its conjugate \(f^\dagger\) can be used to encode a qubit, where the quantum information is stored in the parity of the fermionic state.
+        </p>
+        <h2>(B) Quantum Dots and Majorana Fermion Manipulation</h2>
+        <p>
+            To manipulate Majorana fermions in practice, we can couple them to quantum dots, which are nanoscale semiconductor structures that can trap electrons. The coupling between a quantum dot and a Majorana fermion can be described by the Hamiltonian:
+        </p>
+        \[
+        H_T = \sum_i \left( v_i d \gamma_i - v_i^* d^\dagger \gamma_i \right)
+        \]
+        <p>where: 
+        <ul>
+            <li>\(d\) and \(d^\dagger\) are the annihilation and creation operators for the quantum dot,</li>
+            <li>\(v_i\) is the coupling strength between the quantum dot and the Majorana fermion \(\gamma_i\).</li>
+        </ul>
+        </p>
+        <p>
+            By tuning the coupling strengths \(v_i\), we can control the state of the Majorana fermions and perform quantum operations. For example, consider a system where two Majorana fermions \(\gamma_1\) and \(\gamma_2\) are coupled to a quantum dot. The effective Hamiltonian in this case is:
+        </p>
+        \[
+        H_{12} = \epsilon d^\dagger d + (v_1^* d^\dagger - v_1 d) \gamma_1 + (v_2^* d^\dagger - v_2 d) \gamma_2
+        \]
+        <p>
+            where \(\epsilon\) is the energy of the quantum dot. The coupling terms \((v_1^* d^\dagger - v_1 d) \gamma_1\) and \((v_2^* d^\dagger - v_2 d) \gamma_2\) describe the interaction between the quantum dot and the Majorana fermions.
+        </p>
+        <p>
+            The Hamiltonian \(H_{12}\) can be diagonalized to find the eigenstates and eigenvalues. In the basis \(\{|0\rangle_D |0\rangle_{M12}, |1\rangle_D |1\rangle_{M12}, |0\rangle_D |1\rangle_{M12}, |1\rangle_D |0\rangle_{M12}\}\), the Hamiltonian takes the form:
+        </p>
+        \[
+        H_{12} = 
+        \begin{bmatrix}
+        0 & v_1 - iv_2 & 0 & 0 \\
+        v_1 + iv_2 & \epsilon & 0 & 0 \\
+        0 & 0 & 0 & v_1 + iv_2 \\
+        0 & 0 & v_1 - iv_2 & \epsilon
+        \end{bmatrix}
+        \]
+        <p>The eigenvalues of this Hamiltonian are given by:</p>
+        \[
+        E = \epsilon - \sqrt{\left(\frac{\epsilon}{2}\right)^2 + |v_1|^2 + |v_2|^2 \mp 2|v_1 v_2| \sin(\varphi_1/2)}
+        \]
+        <p>
+            where \(\varphi_1 = 2\arg(v_1/v_2)\). To ensure degeneracy in the energy levels, we set \(\sin(\varphi_1/2) = 0\), which implies \(\varphi_1 = 2n\pi\). This condition can be achieved by tuning the magnetic flux \(\Phi_1\) through the system, where \(\varphi_1 = \Phi_1 / \Phi_0\) and \(\Phi_0 = h/2e\).
+        </p>
+        <p>
+            When the degeneracy condition is met, the Hamiltonian simplifies, and we can define a new effective Majorana operator:
+        </p>
+        \[
+        \gamma_{12} = \frac{1}{v} (|v_1| \gamma_1 + |v_2| \gamma_2) = u \gamma_1 + v \gamma_2
+        \]
+        <p>
+            where \(v = \sqrt{|v_1|^2 + |v_2|^2}\). This new operator \(\gamma_{12}\) allows us to rewrite the Hamiltonian in a simpler form:
+        </p>
+        \[
+        H_T = v (d^\dagger + d) \gamma_{12}
+        \]
+        <p>
+            By controlling the parameters \(v_1\) and \(v_2\), we can perform operations on the Majorana qubit, such as rotations in the **Bloch sphere** representation. For example, the operator \(\gamma_{12}\) corresponds to a rotation by \(\pi\) around an axis in the \(xy\)-plane:
+        </p>
+            \[
+            \gamma_{12} = u \sigma_x + v \sigma_y
+            \]
+        <p>
+            where \(\sigma_x\) and \(\sigma_y\) are Pauli matrices. This rotation can be used to implement quantum gates, which opens up the pathway to quantum computing.
+        </p>
+    </div>
+</body>

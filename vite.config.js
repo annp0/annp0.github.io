@@ -13,7 +13,8 @@ export default defineConfig({
         main: resolve(__dirname, 'index.html'),
         vivi: resolve(__dirname, 'vivi.html'),
         404: resolve(__dirname, '404.html'),
-        signature: resolve(__dirname, "signature.html")
+        signature: resolve(__dirname, "signature.html"),
+        qtsum: resolve(__dirname, "qtsum.html")
       },
       output: {
         preserveModules: true

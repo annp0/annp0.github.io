@@ -56,7 +56,7 @@ function init() {
         canvas: document.getElementById("globe")
     });
     renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(window.outerWidth, window.outerHeight);
+    renderer.setSize(window.innerWidth, window.innerHeight);
     // renderer.outputEncoding = THREE.sRGBEncoding;
     document.body.appendChild(renderer.domElement);
 
@@ -67,7 +67,7 @@ function init() {
 
     // Initialize camera, light
     camera = new PerspectiveCamera();
-    camera.aspect = window.outerWidth / window.outerHeight;
+    camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
 
     // Setup camera
@@ -154,9 +154,9 @@ function initGlobe(points, pairs, countries) {
 }
 
 function onWindowResize() {
-    camera.aspect = window.outerWidth / window.outerHeight;
+    camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize(window.outerWidth, window.outerHeight);
+    renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
 function animate() {

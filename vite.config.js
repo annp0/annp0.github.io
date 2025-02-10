@@ -12,7 +12,8 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, 'index.html'),
         vivi: resolve(__dirname, 'vivi.html'),
-        404: resolve(__dirname, '404.html')
+        404: resolve(__dirname, '404.html'),
+        signature: resolve(__dirname, "signature.html")
       },
       output: {
         preserveModules: true

@@ -14,7 +14,7 @@
 <body>
     <div id="content">
         <h1>Nan An</h1>
-        <p style="width: 70%;">Data Scientist, Software Developer, Mathematician, Physist</p>
+        <p style="width: 70%;">Data Scientist, Software Developer, Mathematician, Physicist</p>
         <nav><a id="toaboutbutton">Learn more about me ></a></nav>
         <p style="width: 70%;">The interactive globe displays data gathered from my analytics system. The system also stalls malicious requests.</p>
         <nav><a id="tobuildbutton">Learn more about how I built it ></a></nav>
@@ -68,8 +68,6 @@
         <p>Reads are cached using <code>R-[ID]: Values</code>, as only the most recent read needs to be retained. These entries expire after five minutes.
         </p>
         <p>When Worker A attempts to read data, there are three potential sources: the write-cache, the read-cache, and the database. It first checks the write-cache for the most up-to-date data. If no entry is found, it falls back to the read-cache, and as a last resort, queries the database. This approach means that some retrieved data may be up to five minutes outdated, but this is an acceptable trade-off for improved performance.</p>
-        <h2>Visualization with the Globe</h2>
-        <p>The Globe is built with Three.js. To make sure it is responsive, an event listener is added to <code>window</code> for resizing events. I originally set the canvas to <code>window.innerWidth/Height</code> and <code>position: fixed</code>. However, through testing, I found that on mobile devices, zooming in caused the canvas and the Globe to move and drift unexpectedly. After digging through documentation, I realized this is because of viewport - <code>innerWidth/Height</code> is the size of the viewport (not the whole window) and <code>fixed</code> pins the canvas by viewport. Using <code>outerWidth/Height</code> and <code>position: absolute</code> (which pins the canvas against its parent, <code>body</code>) solved the issue. </p>
         <h2>In the end</h2>
         <p>
             Thanks to Cloudflare’s generous free-tier offerings, all the resources used in this system are free.
@@ -116,7 +114,7 @@
             <h2>Education</h2>
         <ul>
             <li><div>Sep 2023 - Present: Computer Science M. Sc. (Thesis-based)<br>
-                <i>McMaster University, Supervised & Funded by Dr. Jacque Carette</i>
+                <i>McMaster University, Supervised & Funded by Dr. Jacques Carette</i>
             </div></li>
             <li><div>Sep 2019 - Jun 2023: Physics B. Sc.<br> 
                 <i>Shanghaitech Univeristy, Thesis: Majorana Fermions and its use in Quantum Computing</i><br>
@@ -124,29 +122,20 @@
             </div></li>
         </ul>
         </div>
-        <h2>Data Science Projects</h2>
-        <ul>
-            <li><a href="https://github.com/annp0/agnn">AGNN</a>: A Graph Neural Network for Fraud Detection [Python]</li>
-            <li><a href="https://github.com/annp0/dslib">DSLIB</a>: A Library for Data Science Automation [Python]</li>
-        </ul>
-        <h2>Software Projects</h2>
-        <ul>
-            <li><a href="https://github.com/annp0/tfsi">TFSI</a>: A tagless final-style interpreter [Haskell]</li>
-            <li><a href="https://github.com/annp0/opentelemetry">OpenTelemetry</a>: A telemetry communication software [Haskell/C++]</li>
-            <li><a href="https://github.com/annp0/anregex">AnRegex</a>: A NFA Regex Engine [Python]</li>
-            <li><a href="https://github.com/annp0/anrt">AnRT</a>: A 3D Ray Tracing Rendering Engine [C++]</li>
-        </ul>
-        <h2>Research Project</h2>
-        <ul>
-            <li><a href="https://github.com/annp0/models-in-agda-pilot">Models in Agda</a>: Showcasing software modeling with dependent types [Agda]</li>
-        </ul>
         <div id="Notes">
         <h2>Notes (Mathematics)</h2>
+        <p>
+            I find the connection between topological and algebraic structures beautiful.
+        </p>
             <ul>
+                <li><div><a href="files/notes-on-dt.pdf">Notes on Differential Topology</a><br>
+                This note was written while I was taking a course by Dr. Daniel Skodlerack. I was the only student in the course. I recall that the department had to arrange a special meeting with me and a committee to discuss how to handle routine matters like grading, exams, and assignments. It was fun. 
+                </div></li>
                 <li><a href="files/ct-1.pdf">Notes on Natural Transformation</a></li>
-                <li><a href="files/notes-on-dt.pdf">Notes on Differential Topology</a></li>
+                <li><a href="files/scoho.pdf">Notes on Holomorphic Vector Bundles & Sheaf Cohomology </a></li>
                 <li><a href="files/ra-sol-ch1-3.pdf">Solutions to Selected Real Analysis Problems</a></li>
                 <li><a href="files/galois.pdf">Introduction to Galois Theory</a></li>
+                </div></li>
             </ul>
         </div>
     </div>

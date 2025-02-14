@@ -95,9 +95,7 @@ function init() {
     // Initialize controls
     controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
-    controls.dynamicDampingFactor = 0.01;
     controls.enablePan = false;
-    controls.rotateSpeed = 0.2;
     controls.enableZoom = false;
     controls.autoRotate = true;
 

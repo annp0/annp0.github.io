@@ -16,7 +16,7 @@ const controls = new OrbitControls(camera, renderer.domElement);
 controls.autoRotate = true
 controls.enablePan = false
 controls.autoRotateSpeed = 1
-controls.minDistance = 2
+controls.minDistance = 2.3
 controls.maxDistance = 5
 controls.enableDamping = true
 

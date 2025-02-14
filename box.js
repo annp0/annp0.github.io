@@ -14,6 +14,12 @@ const renderer = new THREE.WebGLRenderer({
 const controls = new OrbitControls(camera, renderer.domElement);
 
 controls.autoRotate = true
+controls.enablePan = false
+controls.autoRotateSpeed = 1
+controls.minDistance = 2
+controls.maxDistance = 5
+controls.enableDamping = true
+
 
 const backLight = new THREE.PointLight(0xffffff, 5)
 backLight.position.y = 2

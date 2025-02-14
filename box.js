@@ -3,11 +3,12 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight)
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.5, 200)
 
 const renderer = new THREE.WebGLRenderer({
     canvas: document.getElementById("frame"),
-    stencil: true
+    stencil: true,
+    antialias: true
 })
 
 const controls = new OrbitControls(camera, renderer.domElement);
@@ -70,7 +71,7 @@ addStencilMat(
     new THREE.Vector3(0, 0, 1), 
     0, 0, 0, 1, 
     [
-        new THREE.Mesh(new THREE.SphereGeometry(5, 20, 20), new THREE.MeshStandardMaterial({color : new THREE.Color('yellow'), side: THREE.DoubleSide})),
+        new THREE.Mesh(new THREE.SphereGeometry(20, 20, 20), new THREE.MeshStandardMaterial({color : new THREE.Color('yellow'), side: THREE.DoubleSide, depthWrite: false})),
         obj1, line1
     ]
 )
@@ -84,7 +85,7 @@ addStencilMat(
     new THREE.Vector3(0, 0, -1), 
     0, Math.PI, 0, 2, 
     [
-        new THREE.Mesh(new THREE.SphereGeometry(5, 20, 20), new THREE.MeshStandardMaterial({color : new THREE.Color('pink'), side: THREE.DoubleSide})), 
+        new THREE.Mesh(new THREE.SphereGeometry(20, 20, 20), new THREE.MeshStandardMaterial({color : new THREE.Color('pink'), side: THREE.DoubleSide})), 
         line2, obj2
     ]
 )
@@ -98,7 +99,7 @@ addStencilMat(
     new THREE.Vector3(1, 0, 0), 
     0, Math.PI/2 , 0, 3, 
     [
-        new THREE.Mesh(new THREE.SphereGeometry(5, 20, 20), new THREE.MeshStandardMaterial({color : new THREE.Color('lightgreen'), side: THREE.DoubleSide})), 
+        new THREE.Mesh(new THREE.SphereGeometry(20, 20, 20), new THREE.MeshStandardMaterial({color : new THREE.Color('lightgreen'), side: THREE.DoubleSide})), 
         obj3, line3
     ]
 )
@@ -112,12 +113,12 @@ addStencilMat(
     new THREE.Vector3(-1, 0, 0), 
     0, -Math.PI/2 , 0, 4, 
     [
-        new THREE.Mesh(new THREE.SphereGeometry(5, 20, 20), new THREE.MeshStandardMaterial({color : new THREE.Color('lightblue'), side: THREE.DoubleSide})), 
+        new THREE.Mesh(new THREE.SphereGeometry(20, 20, 20), new THREE.MeshStandardMaterial({color : new THREE.Color('lightblue'), side: THREE.DoubleSide})), 
         obj4, line4
     ]
 )
 
-const obj5Geo =  new THREE.IcosahedronGeometry(0.5, 0)
+const obj5Geo =  new THREE.TorusGeometry(0.4, 0.1, 6, 5)
 const line5 = new THREE.LineSegments(new THREE.EdgesGeometry(obj5Geo), new THREE.LineBasicMaterial({color: 0x000000}))
 const obj5Mat = new THREE.MeshStandardMaterial({color : new THREE.Color('pink')})
 const obj5 = new THREE.Mesh(obj5Geo, obj5Mat)
@@ -126,12 +127,12 @@ addStencilMat(
     new THREE.Vector3(0, 1, 0), 
     -Math.PI/2, 0, 0, 5, 
     [
-        new THREE.Mesh(new THREE.SphereGeometry(5, 20, 20), new THREE.MeshStandardMaterial({color : new THREE.Color('orange'), side: THREE.DoubleSide})), 
+        new THREE.Mesh(new THREE.SphereGeometry(20, 20, 20), new THREE.MeshStandardMaterial({color : new THREE.Color('orange'), side: THREE.DoubleSide})), 
         line5, obj5
     ]
 )
 
-const obj6Geo =  new THREE.IcosahedronGeometry(0.5, 0)
+const obj6Geo =  new THREE.IcosahedronGeometry(0.5, 2)
 const line6 = new THREE.LineSegments(new THREE.EdgesGeometry(obj6Geo), new THREE.LineBasicMaterial({color: 0x000000}))
 const obj6Mat = new THREE.MeshStandardMaterial({color : new THREE.Color('orange')})
 const obj6 = new THREE.Mesh(obj6Geo, obj6Mat)
@@ -140,7 +141,7 @@ addStencilMat(
     new THREE.Vector3(0, -1, 0), 
     Math.PI/2, 0, 0, 6, 
     [
-        new THREE.Mesh(new THREE.SphereGeometry(5, 20, 20), new THREE.MeshStandardMaterial({color : new THREE.Color('cyan'), side: THREE.DoubleSide})), 
+        new THREE.Mesh(new THREE.SphereGeometry(20, 20, 20), new THREE.MeshStandardMaterial({color : new THREE.Color('cyan'), side: THREE.DoubleSide})), 
         line6, obj6
     ]
 )
@@ -165,10 +166,14 @@ function animate() {
     line4.rotation.x += 0.005
     obj4.rotation.y += 0.005
     line4.rotation.y += 0.005
-    obj5.rotation.y += 0.001
-    line5.rotation.y += 0.001
-    obj6.rotation.y += 0.002
-    line6.rotation.y += 0.002
+    obj5.rotation.y += 0.005
+    line5.rotation.y += 0.005
+    obj5.rotation.x += 0.005
+    line5.rotation.x += 0.005
+    obj6.rotation.y += 0.005
+    line6.rotation.y += 0.005
+    obj6.rotation.x += 0.005
+    line6.rotation.x += 0.005
     
 
     controls.update();

@@ -14,7 +14,8 @@ export default defineConfig({
         vivi: resolve(__dirname, 'vivi.html'),
         404: resolve(__dirname, '404.html'),
         signature: resolve(__dirname, "signature.html"),
-        qtsum: resolve(__dirname, "qtsum.html")
+        qtsum: resolve(__dirname, "qtsum.html"),
+        gallary: resolve(__dirname, "gallery.html")
       },
       output: {
         preserveModules: true

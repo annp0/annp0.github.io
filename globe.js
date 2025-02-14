@@ -45,7 +45,6 @@ function renderGlobe(points, pairs, countries) {
     init();
     initGlobe(points, pairs, countries);
     onWindowResize();
-    animate();
 }
 
 // SECTION Initializing core ThreeJS elements
@@ -57,6 +56,7 @@ function init() {
     });
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setAnimationLoop(animate);
     // renderer.outputEncoding = THREE.sRGBEncoding;
     document.body.appendChild(renderer.domElement);
 
@@ -162,5 +162,4 @@ function onWindowResize() {
 function animate() {
     controls.update();
     renderer.render(scene, camera);
-    requestAnimationFrame(animate);
 }
